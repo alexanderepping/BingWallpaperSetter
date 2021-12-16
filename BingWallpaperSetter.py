@@ -3,20 +3,21 @@ import os
 import datetime
 
 
-## User Variables
-userName                = 'alexander'
-fileDir                 = '/home/' + userName + '/Programs/BingWallpaperSetter/' # directory where lastWallpaperFilename and index.html are stored
-wallpapersDir           = '/home/' + userName + '/Pictures/BingWallpaper/' # directory to save wallpapers in
-
-nitrogenConfigFile      = '/home/' + userName + '/.config/nitrogen/bg-saved.cfg'
-lastWallpaperFilename   = 'lastWallpaper.txt' # file where link of the last downloaded Wallpaper is stored
+## User Variables (userPath is '/home/user/', both paths can be changed)
+userPath = os.path.abspath(__file__)[ : os.path.abspath(__file__).find('/', 6)+1]
+wallpapersDir           = userPath + 'Pictures/BingWallpaper/' # directory to save wallpapers in
+nitrogenConfigFile      = userPath + '.config/nitrogen/bg-saved.cfg'
 
 wgetQuiet               = True # set to true to get no output by wget
 
 
 ## Variable Definitions
+fileDir = os.path.abspath(__file__).strip('BingWallpaperSetter.py')
+lastWallpaperFilename   = 'lastWallpaper.txt' 
+
 bingStartpage   = 'https://www.bing.com'
 htmlTag         = ['<link rel="preload" href="', '" as="image" id="preloadBg"  />']
+
 date            = datetime.datetime.now()
 
 if wgetQuiet:
