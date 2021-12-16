@@ -43,6 +43,10 @@ endLink     = line.find(htmlTag[1], startLink)
 linkWallpaper = bingStartpage + line[startLink:endLink]
 
 # check if lastWallpaper.txt exists, if not create it
+if not os.path.isdir(wallpapersDir):
+    os.system('mkdir ' + wallpapersDir)
+
+# check if lastWallpaper.txt exists, if not create it
 if not os.path.isfile(fileDir + lastWallpaperFilename):
     open(fileDir + lastWallpaperFilename, 'w').close()
 
@@ -70,17 +74,18 @@ if lastLinkWallpaper != linkWallpaper:
 
 
 # set wallpaper
-nitrogenConfig = open(nitrogenConfigFile, 'r')
-nitrogenFile   = nitrogenConfig.readlines()
-nitrogenConfig.close()
+# nitrogenConfig = open(nitrogenConfigFile, 'r')
+# nitrogenFile   = nitrogenConfig.readlines()
+# nitrogenConfig.close()
+# 
+# for i in range(len(nitrogenFile)):
+#     if nitrogenFile[i][:5] == 'file=':
+#         nitrogenFile[i] = 'file=' + pathWallpaper + '\n'
+# 
+# nitrogenConfig = open(nitrogenConfigFile, 'w')
+# nitrogenConfig.writelines(nitrogenFile)
+# nitrogenConfig.close()
 
-for i in range(len(nitrogenFile)):
-    if nitrogenFile[i][:5] == 'file=':
-        nitrogenFile[i] = 'file=' + pathWallpaper + '\n'
-
-nitrogenConfig = open(nitrogenConfigFile, 'w')
-nitrogenConfig.writelines(nitrogenFile)
-nitrogenConfig.close()
-
-os.system('nitrogen --restore')
-os.system('nitrogen --restore') # sometimes it takes two calls to restore the wallpaper
+# os.system('nitrogen --restore')
+# os.system('nitrogen --restore') # sometimes it takes two calls to restore the wallpaper
+os.system('nitrogen --head=0 --set-auto ' + pathWallpaper) 
