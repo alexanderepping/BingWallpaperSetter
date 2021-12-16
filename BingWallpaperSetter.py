@@ -88,4 +88,4 @@ if lastLinkWallpaper != linkWallpaper:
 
 # os.system('nitrogen --restore')
 # os.system('nitrogen --restore') # sometimes it takes two calls to restore the wallpaper
-os.system('nitrogen --head=0 --set-auto ' + pathWallpaper) 
+os.system('nitrogen --head=0 --set-zoom ' + pathWallpaper) 
