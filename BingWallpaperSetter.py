@@ -1,14 +1,15 @@
 ## Imports
 import os
+import sys
 import datetime
+import time
 
 
 ## User Variables (userPath is '/home/user/', both paths can be changed)
 userPath = os.path.abspath(__file__)[ : os.path.abspath(__file__).find('/', 6)+1]
 wallpapersDir           = userPath + 'Pictures/BingWallpaper/' # directory to save wallpapers in
-nitrogenConfigFile      = userPath + '.config/nitrogen/bg-saved.cfg'
 
-wgetQuiet               = True # set to true to get no output by wget
+wgetQuiet               = False # set to true to get no output by wget
 
 
 ## Variable Definitions
@@ -26,10 +27,24 @@ else:
     wgetOptions = ''
 
 
+## Function Definitions
+def waitForDownload(filepath, stopTime=100):
+    waitTime=0
+    while not os.path.exists(filepath):
+        print('Waiting for download!')
+        time.sleep(5)
+        waitTime+=1
+        if waitTime > stopTime:
+            sys.exit("Took too long to download!")
+
+
 ## Main Program
 # delete old index.html document of the bing startpage and get the new
 os.system('rm ' + fileDir + 'index.html')
 os.system('wget ' + wgetOptions + '-O ' + fileDir + 'index.html ' + bingStartpage)
+
+# wait for file to download
+waitForDownload(fileDir + 'index.html')
 
 # read index.html
 file = open(fileDir + 'index.html', 'r')
@@ -47,7 +62,7 @@ if not os.path.isdir(wallpapersDir):
     os.system('mkdir ' + wallpapersDir)
 
 # check if lastWallpaper.txt exists, if not create it
-if not os.path.isfile(fileDir + lastWallpaperFilename):
+if not os.path.exists(fileDir + lastWallpaperFilename):
     open(fileDir + lastWallpaperFilename, 'w').close()
 
 # check which wallpaper was downloaded last
@@ -72,20 +87,8 @@ if lastLinkWallpaper != linkWallpaper:
     lastLinkWallpaper = lastWallpaperFile.write(linkWallpaper)
     lastWallpaperFile.close()
 
+# wait for image to download
+waitForDownload(pathWallpaper)
 
-# set wallpaper
-# nitrogenConfig = open(nitrogenConfigFile, 'r')
-# nitrogenFile   = nitrogenConfig.readlines()
-# nitrogenConfig.close()
-# 
-# for i in range(len(nitrogenFile)):
-#     if nitrogenFile[i][:5] == 'file=':
-#         nitrogenFile[i] = 'file=' + pathWallpaper + '\n'
-# 
-# nitrogenConfig = open(nitrogenConfigFile, 'w')
-# nitrogenConfig.writelines(nitrogenFile)
-# nitrogenConfig.close()
 
-# os.system('nitrogen --restore')
-# os.system('nitrogen --restore') # sometimes it takes two calls to restore the wallpaper
-os.system('nitrogen --head=0 --set-zoom ' + pathWallpaper) 
+os.system('feh --bg-fill ' + pathWallpaper) 
